@@ -120,6 +120,11 @@ class course_output implements \renderable, \templatable
     private $courseformatoptions;
 
     /**
+     * If we are using tile fitter to hide tiles initially while we work out screen width in JS.
+     */
+    private $hidetilesinitially;
+
+    /**
      * course_output constructor.
      * @param \stdClass $course the course object.
      * @param bool $fromajax Whether we are rendering for AJAX request.
@@ -148,6 +153,7 @@ class course_output implements \renderable, \templatable
         }
         $this->completionenabled = $course->enablecompletion && !isguestuser();
         $this->courseformatoptions = $this->get_course_format_options($this->fromajax);
+        $this->hidetilesinitially = format_tiles_width_template_data($this->course->id)['hidetilesinitially'];
     }
 
     /**
@@ -196,7 +202,7 @@ class course_output implements \renderable, \templatable
         };
         $data['isediting'] = $this->isediting;
         $data['sesskey'] = sesskey();
-        $data['showinitialpageloadingicon'] = format_tiles_width_template_data($this->course->id)['hidetilesinitially'];
+        $data['showinitialpageloadingicon'] = $this->hidetilesinitially;
         $data['userdisabledjsnav'] = get_user_preferences('format_tiles_stopjsnav');
         $data['useSubtiles'] = get_config('format_tiles', 'allowsubtilesview') && $this->courseformatoptions['courseusesubtiles'];
         $data['usingjsnav'] = get_config('format_tiles', 'usejavascriptnav')
@@ -468,7 +474,7 @@ class course_output implements \renderable, \templatable
                     'titleclass' => strlen($title) >= $longtitlelength ? ' longtitle' : '',
                     'progress' => false,
                     'isactive' => $this->course->marker == $section->section,
-                    'extraclasses' => ''
+                    'extraclasses' => $this->hidetilesinitially ? 'initiallyhidden' : ''
                 );
 
                 // If photo tile backgrounds are allowed by site admin, prepare them for this tile.

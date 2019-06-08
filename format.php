@@ -130,7 +130,10 @@ $jsparams = array(
     'userId' => $USER->id,
     'fitTilesToWidth' => get_config('format_tiles', 'fittilestowidth')
         && !optional_param("skipcheck", 0, PARAM_INT)
-        && !isset($SESSION->format_tiles_skip_width_check)
+        && !isset($SESSION->format_tiles_skip_width_check),
+    // Window overlay may conflict with some themes.
+    // Developer can disable it by setting this to false if needed.  Maybe will have an admin setting eventually.
+    'useWindowOverlay' => true
 );
 if (!$isediting) {
     // Initalise the main JS module for non editing users.

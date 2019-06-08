@@ -330,6 +330,12 @@ li#section-0.section.main.clearfix {
     box-shadow: 2px 4px 5px 0 #bdbdbd;
     position: relative;
 }
+.format-tiles .course-content ul.tiles .faded {
+    opacity: 0.3;
+}
+.format-tiles .course-content ul.tiles .initiallyhidden {
+    opacity: 0;
+}
 .format-tiles .course-content ul.tiles .tile.spacer {
     margin-top: 0;
     margin-bottom: 0;

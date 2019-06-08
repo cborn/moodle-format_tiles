@@ -341,15 +341,7 @@ define(["jquery", "core/ajax"], function ($, ajax) {
      */
     var unHideTiles = function() {
         $(Selector.TILES).animate({opacity: 1}, "fast");
-        $(Selector.TILE).not(Selector.SPACER).each(function(index, tile) {
-            tile = $(tile);
-            setTimeout(function() {
-                tile.animate(
-                    {opacity: tile.hasClass("tile-hidden") || tile.hasClass("tile-restricted") ? 0.5 : 1},
-                    "fast"
-                );
-            }, index * 10);
-        });
+        $(Selector.TILE).removeClass("initiallyhidden");
         $(Selector.SECTION_ZERO).animate({opacity: 1}, "fast");
         $("#page-loading-icon").fadeOut(500).remove();
     };
