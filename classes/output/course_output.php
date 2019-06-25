@@ -125,13 +125,20 @@ class course_output implements \renderable, \templatable
     private $hidetilesinitially;
 
     /**
+     * Is this a Totara environment?
+     */
+    private $istotara;
+
+    /**
      * course_output constructor.
      * @param \stdClass $course the course object.
      * @param bool $fromajax Whether we are rendering for AJAX request.
      * @param int $sectionnum the id of the current section
      * @param \renderer_base|null $courserenderer
      */
-    public function __construct($course, $fromajax = false, $sectionnum = 0, \renderer_base $courserenderer = null) {
+    public function __construct(
+        $course, $fromajax = false, $sectionnum = 0, \renderer_base $courserenderer = null, $istotara = false
+    ) {
         global $PAGE;
         $this->course = $course;
         $this->fromajax = $fromajax;
@@ -154,6 +161,7 @@ class course_output implements \renderable, \templatable
         $this->completionenabled = $course->enablecompletion && !isguestuser();
         $this->courseformatoptions = $this->get_course_format_options($this->fromajax);
         $this->hidetilesinitially = format_tiles_width_template_data($this->course->id)['hidetilesinitially'];
+        $this->istotara = $istotara;
     }
 
     /**
@@ -214,6 +222,9 @@ class course_output implements \renderable, \templatable
 
         foreach ($this->courseformatoptions as $k => $v) {
             $data[$k] = $v;
+        }
+        if ($this->istotara) {
+            $data['istotara'] = 1;
         }
         return $data;
     }
@@ -326,6 +337,9 @@ class course_output implements \renderable, \templatable
         } else {
             $data = $this->format->get_format_options();
         }
+        if (isset($data['defaulttileicon'])) {
+            $data['defaulttileicon'] = 'tileicon/' . $data['defaulttileicon'];
+        }
         return $data;
     }
     /**
@@ -357,7 +371,7 @@ class course_output implements \renderable, \templatable
         $data['summary'] = $output->format_summary_text($thissection);
         $data['tileid'] = $thissection->section;
         $data['secid'] = $thissection->id;
-        $data['tileicon'] = $thissection->tileicon;
+        $data['tileicon'] = $thissection->tileicon ? 'tileicon/' . $thissection->tileicon : "";
 
         // If photo tile backgrounds are allowed by site admin, prepare the image for this section.
         if (get_config('format_tiles', 'allowphototiles')) {
@@ -464,7 +478,7 @@ class course_output implements \renderable, \templatable
                     'tileid' => $section->section,
                     'secid' => $section->id,
                     'title' => $title,
-                    'tileicon' => $section->tileicon,
+                    'tileicon' => $section->tileicon ? 'tileicon/' . $section->tileicon : "",
                     'current' => course_get_format($this->course)->is_section_current($section),
                     'hidden' => !$section->visible,
                     'visible' => $section->visible,
@@ -482,7 +496,7 @@ class course_output implements \renderable, \templatable
                     $tilephoto = new tile_photo($this->course->id, $section->id);
                     $tilephotourl = $tilephoto->get_image_url();
 
-                    $newtile['extraclasses'] .= $phototileextraclasses;
+                    $newtile['extraclasses'] .= ' ' . $phototileextraclasses;
                     $newtile['phototileinlinestyle'] = 'style = "background-image: url(' . $tilephotourl . ')";';
                     $newtile['hastilephoto'] = $tilephotourl ? 1 : 0;
                     $newtile['phototileurl'] = $tilephotourl;

@@ -22,6 +22,8 @@ It supports the Privacy API.
 
 It is intended to support the current versions of the most popular browsers such as Chrome, Firefox, desktop Safari and mobile iOS and Android.
 
+Totara support: The plugin was adapted to work with Totara on an experimental basis from version 3.7.0 onwards (by David Watson in collaboration with eThink). 
+
 ##Documentation
 Detailed information about the operation of the plugin is available at http://evolutioncode.uk/tiles
 

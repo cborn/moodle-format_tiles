@@ -53,7 +53,7 @@ define(["jquery", "core/templates", "core/ajax", "core/str", "core/notification"
                 }
                 var icons = JSON.parse(response.icons);
                 Object.keys(icons).forEach(function(icon) {
-                    iconSet.push({filename: icon, displayname: icons[icon]});
+                    iconSet.push({filename: 'tileicon/' + icon, displayname: icons[icon]});
                 });
                 if (iconSet.length <= 0) {
                     require(["core/log"], function(log) {
@@ -157,6 +157,13 @@ define(["jquery", "core/templates", "core/ajax", "core/str", "core/notification"
                         .done(function (html) {
                             divToAnimate.html(html)
                                 .animate({opacity: 1}, 500);
+
+                            // This isn't ideal but in Totara, {{'pix}} does not render in JS via mustache.
+                            // So we do a quick check if our pix url is correct and fix it if not.
+                            var newTileIcon = $("#tile-icon-" + sectionId).find(".icon");
+                            if (!newTileIcon.attr("src").endsWith(templateParams.tileicon)) {
+                                newTileIcon.attr("src", newTileIcon.attr("src") + templateParams.tileicon);
+                            }
                         });
                 });
                 if (pageType === "course-editsection" && imageType === "tilephoto") {
@@ -221,6 +228,7 @@ define(["jquery", "core/templates", "core/ajax", "core/str", "core/notification"
                 require(["core/log"], function(log) {
                     log.error("Fail setting icon");
                     log.debug(response);
+                    log.debug(ajaxIconPickArgs);
                 });
             });
         };
@@ -288,7 +296,8 @@ define(["jquery", "core/templates", "core/ajax", "core/str", "core/notification"
                         icon_picker_icons: iconSet,
                         photosallowed: allowPhotoTiles,
                         wwwroot: config.wwwroot,
-                        documentationurl: documentationurl
+                        documentationurl: documentationurl,
+                        istotara: $("body").hasClass("totara")
                     }).done(function (iconsHTML) {
                         require(["core/modal_factory"], function (modalFact) {
                             modalFact.create({

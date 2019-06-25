@@ -40,9 +40,10 @@
         "availabilitymessage": "Hidden"
     }
 }}
-
-<div class="availabilityinfo isrestricted isfullinfo">
-    <span class="tag tag-info"{{#visible}}
-        {{#availabilitymessage}}title="{{availabilitymessage}}" data-html="true" data-toggle="tooltip"{{/availabilitymessage}}
-    {{/visible}}>{{^visible}}{{#str}}hiddenfromstudents{{/str}}{{/visible}}{{#visible}}{{#str}}restricted{{/str}}{{/visible}}</span>
+<div class="availabilityinfo-outer">
+    <div class="availabilityinfo isrestricted isfullinfo">
+        <span class="tag tag-info"{{#visible}}
+            {{#availabilitymessage}}title="{{availabilitymessage}}" data-html="true" data-toggle="tooltip"{{/availabilitymessage}}
+        {{/visible}}>{{^visible}}{{#str}}hiddenfromstudents{{/str}}{{/visible}}{{#visible}}{{#str}}restricted{{/str}}{{/visible}}</span>
+    </div>
 </div>

@@ -29,6 +29,7 @@ use moodleform;
 
 global $CFG;
 require_once("{$CFG->libdir}/formslib.php");
+require_once($CFG->dirroot .'/course/format/tiles/locallib.php');
 
 /**
  * Class registration_form
@@ -67,6 +68,16 @@ class registration_form extends moodleform {
         $moodlerelease = $CFG->release;
         if (preg_match('/^(\d+\.\d.*?)[\. ]/', $moodlerelease, $matches)) {
             $moodlerelease = $matches[1];
+        }
+        if (format_tiles_is_totara()) {
+            $totaraversiontext = "(Totara)";
+            if (function_exists('totara_version_info')) {
+                $versioninfo = totara_version_info();
+                if (isset($versioninfo->newversion)) {
+                    $totaraversiontext = $versioninfo->newversion;
+                }
+            }
+            $moodlerelease .= ' ' . $totaraversiontext;
         }
         $mform->addElement('text', 'moodleversion', get_string('moodleversion'),
             array('class' => 'registration_textfield'));

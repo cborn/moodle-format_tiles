@@ -43,15 +43,14 @@
         "title": "Introduction"
     }
 }}
-
-<span class="tile-icon{{#isediting}} launchiconpicker{{/isediting}}"
+<span class="tile-icon{{#isediting}} launchiconpicker{{/isediting}}" id="tile-icon-{{secid}}"
     {{#isediting}}
       data-section="{{tileid}}" data-sectionid="{{secid}}" data-sectionid="3" data-section="2"
     {{/isediting}}>
     {{#tileicon}}
-        {{#pix}}tileicon/{{{tileicon}}}, format_tiles{{/pix}}
+        {{#pix}}{{tileicon}}, format_tiles{{/pix}}
     {{/tileicon}}
     {{^tileicon}}
-        {{#pix}}tileicon/{{{defaulttileicon}}}, format_tiles{{/pix}}
+        {{#pix}}{{defaulttileicon}}, format_tiles{{/pix}}
     {{/tileicon}}
 </span>

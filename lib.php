@@ -31,6 +31,7 @@ define('FORMAT_TILES_FILTERBAR_OUTCOMES', 2);
 define('FORMAT_TILES_FILTERBAR_BOTH', 3);
 
 require_once($CFG->dirroot . '/course/format/lib.php');
+require_once($CFG->dirroot . '/course/format/tiles/locallib.php');
 
 /**
  * Main class for the course format Tiles
@@ -1028,6 +1029,10 @@ class format_tiles extends format_base {
                     redirect(new moodle_url('/course/view.php', array('id' => $page->course->id)));
                 }
             }
+        }
+        // If our environment is Totara, add a totara class to the body, so that jQuery and CSS can see it.
+        if (format_tiles_is_totara()) {
+            $page->add_body_class("totara");
         }
     }
 }

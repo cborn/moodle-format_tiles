@@ -77,8 +77,8 @@ define(["jquery", "core/ajax", "core/templates", "core/notification", "core/str"
         };
 
         /**
-         * This dates from before the change to using AJAX for editing teacher content.
-         * Once the new functionality is no longer experimental, this can be removed.
+         * This dates from before the change to using AJAX for editing teacher content (not yet released).
+         * Once the new functionality is released and no longer experimental, this can be removed.
          *
          *  If an editing user clicks a show/hide menu item on a course module
          * @param {object} clickEvent
@@ -86,6 +86,9 @@ define(["jquery", "core/ajax", "core/templates", "core/notification", "core/str"
         var legacyToggleHideCourseMod = function (clickEvent) {
             var clickedLink = $(clickEvent.currentTarget);
             var actions;
+            if (body.hasClass("totara")) {
+                return;
+            }
             if (clickedLink.attr("data-action") === "tiles-hide") {
                 actions = {changeTo: ClassNames.HIDE, old: ClassNames.SHOW};
                 $(Selector.STEALTH_UNAVAIL_LINK).hide();
@@ -168,8 +171,12 @@ define(["jquery", "core/ajax", "core/templates", "core/notification", "core/str"
                 text: "txt",
                 html: "html"
             };
-            // Return the type corresponding to the last item in the URL, excluding anything after '-'.
-            return extensions[iconURL.split("/").slice(-1)[0].split("-")[0]];
+            if (iconURL) {
+                // Return the type corresponding to the last item in the URL, excluding anything after '-'.
+                return extensions[iconURL.split("/").slice(-1)[0].split("-")[0]];
+            } else {
+                return false;
+            }
         };
 
         /**
@@ -349,9 +356,11 @@ define(["jquery", "core/ajax", "core/templates", "core/notification", "core/str"
                     if (convertedLabel !== 0) {
                         // User has just converted a label to a page, so highlight the new item they just converted.
                         var newPage = $("#module-" + convertedLabel);
-                        body.animate({scrollTop: newPage.offset().top - 130}, "fast");
-                        for (var x = 0; x < 3; x++) {
-                            newPage.fadeOut(300).fadeIn(300);
+                        if (newPage !== undefined) {
+                            body.animate({scrollTop: newPage.offset().top - 130}, "fast");
+                            for (var x = 0; x < 3; x++) {
+                                newPage.fadeOut(300).fadeIn(300);
+                            }
                         }
                     }
 

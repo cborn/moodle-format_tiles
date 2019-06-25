@@ -203,6 +203,7 @@ class format_tiles_external extends external_api
     private static function set_tile_icon($data) {
         global $DB;
         $availableicons = (new \format_tiles\icon_set)->available_tile_icons($data['courseid']);
+        $data['image'] = str_replace('tileicon/', '', $data['image']);
         if (!isset($availableicons[$data['image']])) {
             throw new invalid_parameter_exception('Icon is invalid');
         }

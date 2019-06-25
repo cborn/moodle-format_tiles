@@ -39,6 +39,12 @@ require_once($CFG->dirroot . '/course/format/tiles/locallib.php');
 class format_tiles_renderer extends format_section_renderer_base
 {
     /**
+     * Is this a Totara environment or not.
+     * @var bool
+     */
+    private $istotara = false;
+
+    /**
      * Constructor method, calls the parent constructor
      *
      * @param moodle_page $page
@@ -49,6 +55,23 @@ class format_tiles_renderer extends format_section_renderer_base
         // Method format_tiles_renderer::section_edit_controls() displays 'Set current section' control when editing is on.
         // We need to ensure that 'Turn editing mode on' link is available for user who doesn't have other managing capability.
         $page->set_other_editing_capability('moodle/course:setcurrentsection');
+        $this->istotara = format_tiles_is_totara();
+    }
+
+    /**
+     * Return an instance of the mustache class.
+     * If this is a Totara environment, we need to enable {{#pix}} to bs used from Mustache.
+     * (Totara uses {{#flex_icon}} instead but we don't want to modify all the templates).
+     *
+     * @since 2.9
+     * @return Mustache_Engine
+     */
+    protected function get_mustache() {
+        if ($this->istotara) {
+            $pixhelper = new format_tiles\output\mustache_pix_helper($this);
+            parent::get_mustache()->addHelper('pix', [$pixhelper, 'pix']);
+        }
+        return parent::get_mustache();
     }
 
     /**
@@ -244,7 +267,9 @@ class format_tiles_renderer extends format_section_renderer_base
      * @throws moodle_exception
      */
     public function print_single_section_page($course, $sections, $mods, $modnames, $modnamesused, $displaysection) {
-        $templateable = new \format_tiles\output\course_output($course, false, $displaysection, $this->courserenderer);
+        $templateable = new \format_tiles\output\course_output(
+            $course, false, $displaysection, $this->courserenderer, $this->istotara
+        );
         $data = $templateable->export_for_template($this);
         echo $this->render_from_template('format_tiles/single_section_page', $data);
     }
@@ -263,7 +288,7 @@ class format_tiles_renderer extends format_section_renderer_base
      * @throws moodle_exception
      */
     public function print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused) {
-        $templateable = new \format_tiles\output\course_output($course, false, 0, $this->courserenderer);
+        $templateable = new \format_tiles\output\course_output($course, false, 0, $this->courserenderer, $this->istotara);
         $data = $templateable->export_for_template($this);
         echo $this->render_from_template('format_tiles/multi_section_page', $data);
     }

@@ -49,8 +49,8 @@
 {{#photosallowed}}
     <ul class="nav nav-pills" role="tablist">
         <!-- First the top most node and immediate children -->
-        <li class="nav-item">
-            <a class="nav-link active" href="#tileicons" data-toggle="tab" role="tab">{{#str}}tileicons, format_tiles{{/str}}</a>
+        <li class="nav-item{{#istotara}} active{{/istotara}}">
+            <a class="nav-link{{^istotara}} active{{/istotara}}" href="#tileicons" data-toggle="tab" role="tab">{{#str}}tileicons, format_tiles{{/str}}</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" id="launch-photo-library" href="#photolibrary" data-toggle="tab" role="tab">{{#pix}}camera, format_tiles{{/pix}} {{#str}}photolibrary, format_tiles{{/str}}</a>
@@ -62,7 +62,7 @@
 
 
     <div class="tab-content mt-5" id="myTabContent">
-        <div class="tab-pane show active" id="tileicons" role="tabpanel" aria-labelledby="tileicons-tab">
+        <div class="tab-pane {{#istotara}} active in{{/istotara}}{{^istotara}} show active{{/istotara}}" id="tileicons" role="tabpanel" aria-labelledby="tileicons-tab">
             <div class="iconpickerheader">
                 {{#str}}search{{/str}}
                 {{#pix}}a/search, core, {{#str}}search{{/str}}{{/pix}}
@@ -77,7 +77,7 @@
 
         </div>
 
-        <div class="tab-pane fade" id="photolibrary" role="tabpanel" aria-labelledby="photolibrary-tab">
+        <div class="tab-pane {{#istotara}} fade{{/istotara}}" id="photolibrary" role="tabpanel" aria-labelledby="photolibrary-tab">
             {{!Leave blank for now will lazy load from JS if needed}}
             <h3>{{#str}}photolibrary, format_tiles{{/str}}</h3>
             <div>{{#str}}photolibrary_desc, format_tiles{{/str}}</div>

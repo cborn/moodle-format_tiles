@@ -206,3 +206,13 @@ function format_tiles_width_template_data($courseid) {
         return array('hidetilesinitially' => 0);
     }
 }
+
+/**
+ * Is this a Totara environment? (Totara handles pix and some other things differently).
+ * There is probably a better way to do this for someone more familiar with Totara code base?
+ * @return bool
+ */
+function format_tiles_is_totara() {
+    global $CFG;
+    return is_dir(realpath($CFG->dirroot . '/totara'));
+}

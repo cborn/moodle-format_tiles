@@ -173,3 +173,8 @@ New features
 Other
 - Refactor code for simplicity and to help future features
 - Bug fixes
+
+3.7.1.x Beta (20190240x)
+=========================
+- Add Totara 12 compatibility
+- Refactor tiles window overlay
