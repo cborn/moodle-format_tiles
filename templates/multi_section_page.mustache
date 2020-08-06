@@ -109,6 +109,11 @@
         {{#pix}}collapse, format_tiles{{/pix}}&nbsp;{{#str}}collapsesections, format_tiles{{/str}}
         </a>
     </div>
+    {{#showcompatibilitywarning}}
+        <div class="alert alert-danger">
+            {{#str}}compatibilitywarning, format_tiles{{/str}}
+        </div>
+    {{/showcompatibilitywarning}}
 {{/isediting}}
 
 <ul class="tiles" id="multi_section_tiles">

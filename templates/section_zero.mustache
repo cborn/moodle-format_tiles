@@ -81,7 +81,10 @@
                 {{/content}}
             </ul>
             {{#isediting}}
-                {{{section_zero_add_cm_control_html}}}
+                {{^showcompatibilitywarning}}
+                    {{! Issue 39 if we are using Moodle 3.9 we have a compatibility problem, so hide the add activity item as it causes issues when used}}
+                    {{{section_zero_add_cm_control_html}}}
+                {{/showcompatibilitywarning}}
             {{/isediting}}
         </div>
     </li>

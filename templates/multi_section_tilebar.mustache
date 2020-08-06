@@ -124,7 +124,10 @@
                             {{/course_modules}}
                     {{/is_expanded}}
                 </ul>
-                <div class="mod-chooser-outer"{{#hideaddcmcontrol}} style="display: none;"{{/hideaddcmcontrol}}>{{{single_sec_add_cm_control_html}}}</div>
+                {{^showcompatibilitywarning}}
+                    {{! Issue 39 if we are using Moodle 3.9 we have a compatibility problem, so hide the add activity item as it causes issues when used}}
+                    <div class="mod-chooser-outer"{{#hideaddcmcontrol}} style="display: none;"{{/hideaddcmcontrol}}>{{{single_sec_add_cm_control_html}}}</div>
+                {{/showcompatibilitywarning}}
             </div>
 
         {{/isediting}}

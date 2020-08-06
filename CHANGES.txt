@@ -173,3 +173,9 @@ New features
 Other
 - Refactor code for simplicity and to help future features
 - Bug fixes
+
+3.7.0.17 RC (2019052117)
+========================
+- Added compatibility warning, if using Moodle 3.9 or higher, to show when editing that this version is not compatible.
+- Disabled Add Activity or Resource if using Moodle 3.9 or higher (as it causes course section issues when used).
+- Added note to readme to say see https://moodle.org/plugins/format_tiles for a later version.

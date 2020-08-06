@@ -187,6 +187,7 @@ class course_output implements \renderable, \templatable
      * @throws \dml_exception
      */
     private function get_basic_data($output) {
+        global $CFG;
         $data = [];
         $data['canedit'] = has_capability('moodle/course:update', $this->coursecontext);
         $data['canviewhidden'] = $this->canviewhidden;
@@ -217,6 +218,9 @@ class course_output implements \renderable, \templatable
         }
         // RTL support for nav arrows direction (Arabic/ Hebrew).
         $data['is-rtl'] = right_to_left();
+
+        // Issue #39 if this plugin is being used in Moodle 3.9 (it should not be as it is not compatible) display warning.
+        $data['showcompatibilitywarning'] = $this->isediting && $CFG->version >= 2020050000;
         return $data;
     }
 
