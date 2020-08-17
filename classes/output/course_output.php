@@ -220,7 +220,7 @@ class course_output implements \renderable, \templatable
         $data['is-rtl'] = right_to_left();
 
         // Issue #39 if this plugin is being used in Moodle 3.9 (it should not be as it is not compatible) display warning.
-        $data['showcompatibilitywarning'] = $this->isediting && $CFG->version >= 2020050000;
+        $data['showcompatibilitywarning'] = $this->isediting && ($CFG->version >= 2019120000 || (int)$CFG->branch >= 39);
         return $data;
     }
 
