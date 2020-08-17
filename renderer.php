@@ -99,9 +99,9 @@ class format_tiles_renderer extends format_section_renderer_base
      * @throws moodle_exception
      */
     public function section_edit_control_items($course, $section, $onsectionpage = false) {
-        global $PAGE, $SESSION;
+        global $SESSION;
 
-        if (!$PAGE->user_is_editing()) {
+        if (!$this->page->user_is_editing()) {
             return array();
         }
 
@@ -324,7 +324,6 @@ class format_tiles_renderer extends format_section_renderer_base
      * @see format_section_renderer_base::section_activity_summary()
      */
     public function section_activity_summary($section, $course, $mods) {
-        global $PAGE;
         $modinfo = get_fast_modinfo($course);
         if (empty($modinfo->sections[$section->section])) {
             return '';
@@ -370,7 +369,7 @@ class format_tiles_renderer extends format_section_renderer_base
 
         // Output section activities summary.
         $o = '';
-        if (!$PAGE->user_is_editing()) {
+        if (!$this->page->user_is_editing()) {
             // Added for tiles.
             $contents = '<b>' . get_string('contents', 'format_tiles') . ':</b><br>';
             $extraclass = '';
