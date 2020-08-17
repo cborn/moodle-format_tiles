@@ -174,10 +174,11 @@ Other
 - Refactor code for simplicity and to help future features
 - Bug fixes
 
-3.7.0.17 RC (2019052117)
-========================
+3.7.0.17 RC (2019052117) - 3.7.0.19 (2019052119)
+================================================
 - Added compatibility warning, if using Moodle 3.9 or higher, to show when editing that this version is not compatible.
 - Disabled Add Activity or Resource if using Moodle 3.9 or higher (as it causes course section issues when used).
 - Added note to readme to say see https://moodle.org/plugins/format_tiles for a later version.
 - If user is running an incompatible Moodle version (e.g. 3.9)  and tries to back up course, or is running any Moodle version
  and tries to import an incompatible (3.9 or higher) course, throw error / warn to upgrade plugin (Issue #45).
+- Disallow restores with too many sections or sections numbered too high.

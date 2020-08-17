@@ -292,5 +292,33 @@ class restore_format_tiles_plugin extends restore_format_plugin {
             \core\notification::ERROR(get_string('compatibilitywarning', 'format_tiles'));
             throw new moodle_exception('compatibilitywarning', 'format_tiles');
         }
+
+        $countsections = count($backupinfo->sections);
+        $maxsectionsconfig = get_config('moodlecourse', 'maxsections');
+        if (!isset($maxsectionsconfig) || !is_numeric($maxsectionsconfig)) {
+            $maxsectionsconfig = 52;
+        }
+
+        if ($countsections > $maxsectionsconfig + 1) {
+            $a = new stdClass();
+            $a->numsections = $countsections;
+            $a->maxallowed = $maxsectionsconfig;
+            \core\notification::ERROR(
+                get_string('restoretoomanysections', 'format_tiles', $a)
+            );
+            throw new moodle_exception('restoretoomanysections', 'format_tiles', '', $a);
+        }
+
+        $lastsection = end($backupinfo->sections);
+        $lastsectionnum = (int)$lastsection->title;
+        if ($lastsectionnum && $lastsectionnum > $maxsectionsconfig) {
+            $a = new stdClass();
+            $a->sectionnum = $lastsectionnum;
+            $a->maxallowed = $maxsectionsconfig;
+            \core\notification::ERROR(
+                get_string('restoreincorrectsections', 'format_tiles', $a)
+            );
+            throw new moodle_exception('restoreincorrectsections', 'format_tiles', '', $a);
+        }
     }
 }

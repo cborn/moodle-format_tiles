@@ -387,3 +387,5 @@ $string['showprogresssphototiles_desc'] = 'If selected, student progress (e.g. P
 $string['privacy:metadata:preference:format_tiles_stopjsnav'] = 'Whether the user has disabled animated JavaScript navigation.';
 $string['compatibilitywarning'] = 'Error: this version of the Tiles course format plugin (format_tiles) is not compatible with Moodle 3.9 or higher.  Please ask an administrator to upgrade the plugin.';
 $string['backupcompatibilitywarning'] = 'Error: this version of the Tiles course format plugin (format_tiles) cannot accept backups created using a Moodle version higher than 3.7 (detected higher version {$a})';
+$string['restoretoomanysections'] = 'Error: Cannot restore course as it has more sections ({$a->numsections}) than permitted ({$a->maxallowed})';
+$string['restoreincorrectsections'] = 'Error: Cannot restore course as it contains incorrectly numbered sections (e.g. the last section has a section number ({$a->sectionnum}) higher than the max allowed ({$a->maxallowed})';
