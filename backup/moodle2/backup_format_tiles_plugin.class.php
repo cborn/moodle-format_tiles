@@ -38,6 +38,25 @@ defined('MOODLE_INTERNAL') || die();
 class backup_format_tiles_plugin extends backup_format_plugin {
 
     /**
+     * backup_format_tiles_plugin constructor.
+     * @param $plugintype
+     * @param $pluginname
+     * @param $optigroup
+     * @param $step
+     */
+    public function __construct($plugintype, $pluginname, $optigroup, $step) {
+        global $CFG;
+        parent::__construct($plugintype, $pluginname, $optigroup, $step);
+        $runningmoodle39 = $CFG->version > 2019120000 || (int)$CFG->branch >= 39;
+        if ($runningmoodle39) {
+            // Issue #45 - this plugin version is not compatible with Moodle 3.9 or higher.
+            // Course corruption can occur if this version is used with backup/restore, so warn to upgrade and fail.
+            \core\notification::ERROR(get_string('compatibilitywarning', 'format_tiles'));
+            throw new moodle_exception('compatibilitywarning', 'format_tiles');
+        }
+    }
+
+    /**
      * Returns the format information to attach to section element.
      */
     protected function define_section_plugin_structure() {

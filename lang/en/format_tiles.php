@@ -386,3 +386,4 @@ $string['usesubtilesseczero_help'] = 'If selected, sub tiles will be used in top
 $string['showprogresssphototiles_desc'] = 'If selected, student progress (e.g. Progress 2/5) will be shown on photo tiles';
 $string['privacy:metadata:preference:format_tiles_stopjsnav'] = 'Whether the user has disabled animated JavaScript navigation.';
 $string['compatibilitywarning'] = 'Error: this version of the Tiles course format plugin (format_tiles) is not compatible with Moodle 3.9 or higher.  Please ask an administrator to upgrade the plugin.';
+$string['backupcompatibilitywarning'] = 'Error: this version of the Tiles course format plugin (format_tiles) cannot accept backups created using a Moodle version higher than 3.7 (detected higher version {$a})';

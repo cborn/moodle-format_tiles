@@ -67,6 +67,8 @@ class restore_format_tiles_plugin extends restore_format_plugin {
     public function define_course_plugin_structure() {
         global $DB;
         // Since this method is executed before the restore we can do some pre-checks here.
+        $this->check_compatbility();
+
         // In case of merging backup into existing course find the current number of sections.
         $target = $this->step->get_task()->get_target();
         if (($target == backup::TARGET_CURRENT_ADDING || $target == backup::TARGET_EXISTING_ADDING) &&
@@ -262,5 +264,33 @@ class restore_format_tiles_plugin extends restore_format_plugin {
             return $newfile;
         }
         return false;
+    }
+
+    /**
+     * Issue #45 - this plugin version is not compatible with Moodle 3.9 or higher.
+     * Course corruption can occur if this version is used with backup/restore, so warn to upgrade and fail.
+     * For the same reason reject any course backups from a Moodle 3.9 or higher instance.
+     * @throws coding_exception
+     * @throws moodle_exception
+     */
+    private function check_compatbility() {
+        global $CFG;
+        $backupinfo = $this->step->get_task()->get_info();
+        $backuprelease = $backupinfo->backup_release;
+        $rejectbackup = $backupinfo->original_course_format == 'tiles' &&
+                version_compare($backuprelease, '3.8', 'gt');
+
+        if ($rejectbackup) {
+            \core\notification::ERROR(
+                get_string('backupcompatibilitywarning', 'format_tiles', $backuprelease)
+            );
+            throw new moodle_exception('backupcompatibilitywarning', 'format_tiles', '', $backuprelease);
+        }
+
+        $runningmoodle39 = $CFG->version > 2019120000 || (int)$CFG->branch >= 39;
+        if ($runningmoodle39) {
+            \core\notification::ERROR(get_string('compatibilitywarning', 'format_tiles'));
+            throw new moodle_exception('compatibilitywarning', 'format_tiles');
+        }
     }
 }
