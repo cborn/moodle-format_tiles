@@ -112,6 +112,11 @@
             </a>
         </div>
     {{/hasoutofsequencetiles}}
+    {{#editorwarnings}}
+        <div class="alert alert-warning">
+            {{.}}
+        </div>
+    {{/editorwarnings}}
 {{/isediting}}
 
 <ul class="tiles" id="multi_section_tiles">

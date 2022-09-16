@@ -386,6 +386,7 @@ $string['restoreincorrectsections'] = 'Error: Cannot complete as source course c
 $string['coursetoomanysections'] = 'Warning for editors: this course has more tiles than the maximum allowed.  A maximum of {$a->max} will be shown to students (down to "{$a->tilename}") (editors can see more).';
 $string['tilesoutofsequencewarning'] = 'Warning for editors: The following tile(s) have errors.  Please click the button, or delete one or more of these tiles to fix the issues:';
 $string['tileoutofsequence'] = 'This tile has an out of sequence section number.  Please click the button to fix, or delete the tile altogether (move any contents to another tile first)';
+$string['warningcompatibility'] = 'Please ask a site administrator to upgrade the Tiles course format plugin.  It is not compatible with this version of Moodle.';
 $string['deletetile'] = 'Delete tile';
 $string['deleteemptytiles'] = 'Delete empty tiles';
 $string['scheduleddeleteemptysections'] = 'Task to delete empty sections from course has been scheduled.  Please check back later.';

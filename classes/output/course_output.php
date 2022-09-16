@@ -198,6 +198,7 @@ class course_output implements \renderable, \templatable
      * @throws \dml_exception
      */
     private function get_basic_data($output) {
+        global $CFG;
         $data = [];
         $data['canedit'] = has_capability('moodle/course:update', $this->coursecontext);
         $data['canviewhidden'] = $this->canviewhidden;
@@ -222,6 +223,15 @@ class course_output implements \renderable, \templatable
 
         if (!$this->isediting) {
             $data['course_activity_clipboard'] = $output->course_activity_clipboard($this->course, $this->sectionnum);
+        } else {
+            // Warn if using higher than Moodle 3.
+            if (preg_match('/^(\d+)(\.)(\d.*?)[\. ]/', $CFG->release, $matches)) {
+                if ($matches[1] != 3) {
+                    $message = get_string('warningcompatibility', 'format_tiles');
+                    $data['editorwarnings'][] = $message;
+                    debugging($message);
+                }
+            }
         }
 
         foreach ($this->courseformatoptions as $k => $v) {

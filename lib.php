@@ -630,8 +630,7 @@ class format_tiles extends format_base {
             if (get_config('format_tiles', 'allowphototiles')) {
                 $sectionformatoptionsedit['tilephoto'] = array(
                     'label' => get_string('uploadnewphoto', 'format_tiles'),
-                    'element_type' => 'hidden',
-                    'element_attributes' => array('' => '')
+                    'element_type' => 'hidden'
                 );
             }
             $sectionformatoptions = array_merge_recursive($sectionformatoptions, $sectionformatoptionsedit);

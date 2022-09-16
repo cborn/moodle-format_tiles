@@ -307,3 +307,8 @@ Other
 ======================
 - Fix JS error on course edit form
 - Minor style/layout adjustments for modals, stealth activities and Lambda theme
+
+3.11.1.4 (2020080630)
+======================
+- Fix PHP 8 compatibility on section edit form
+- Add Moodle 4.0 incompatibility warning
