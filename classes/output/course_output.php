@@ -369,7 +369,7 @@ class course_output implements \renderable, \templatable
         if (strlen('single_sec_content') > $longsectionlength) {
             $data['single_sec_content_is_long'] = true;
         }
-        $previousnext = $this->get_previous_next_section_ids($thissection->section);
+        $previousnext = $this->get_previous_next_section_numbers($thissection->section);
         $data['previous_tile_id'] = $previousnext['previous'];
         $data['next_tile_id'] = $previousnext['next'];
 
@@ -1261,32 +1261,33 @@ class course_output implements \renderable, \templatable
         }
     }
 
+
     /**
-     * For the legacy navigation arrows, establish the id of the next and previous sections
-     * @param int $currentsectionnum the id of the section we are in
-     * @return array previous and next ids
+     * For the legacy navigation arrows, establish the section number of the next and previous sections.
+     * @param int $currentsectionnum the section number of the section we are in.
+     * @return array previous and next section numbers.
      */
-    private function get_previous_next_section_ids($currentsectionnum) {
+    private function get_previous_next_section_numbers(int $currentsectionnum): array {
         $visiblesectionnums = [];
         $currentsectionarrayindex = -1;
         foreach ($this->modinfo->get_section_info_all() as $section) {
+            if ($section->section == 0) {
+                continue;
+            }
             if ($section->uservisible) {
                 $visiblesectionnums[] = $section->section;
-                if ($section->section == $currentsectionnum) {
-                    $currentsectionarrayindex = $section->section;
+                if ($section->section <= $currentsectionnum) {
+                    $currentsectionarrayindex++;
                 }
             }
         }
-        if ($currentsectionarrayindex == 0) {
-            $previous = 0; // There is no previous.
-        } else {
-            $previous = $visiblesectionnums[$currentsectionarrayindex - 1];
-        }
-        if ($currentsectionarrayindex == count($visiblesectionnums) - 1) {
-            $next = 0; // There is no next.
-        } else {
-            $next = $visiblesectionnums[$currentsectionarrayindex + 1];
-        }
+
+        // If $currentsectionarrayindex is zero, this means we are on the first available section so there is no "previous".
+        $previous = $currentsectionarrayindex == 0 ? 0 : $visiblesectionnums[$currentsectionarrayindex - 1];
+
+        // If there is no item at the next index, there is no "next" (so set next to zero).
+        $next = $visiblesectionnums[$currentsectionarrayindex + 1] ?? 0;
+
         return array('previous' => $previous, 'next' => $next);
     }
 
@@ -1447,18 +1448,27 @@ class course_output implements \renderable, \templatable
     private function check_modify_embedded_url(string $url) {
         // Youtube.
         $matches = null;
-        $pattern  = '/^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_]+)$/';
+        $pattern  = '/^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_]+)(\?t=[0-9]+)*$/';
         preg_match($pattern, $url, $matches);
         if ($matches && isset($matches[7])) {
-            return 'https://www.youtube.com/embed/' . $matches[7];
+            if (isset($matches[8])) {
+                $starttime = filter_var($matches[8], FILTER_SANITIZE_NUMBER_INT);
+                if ($starttime) {
+                    return "https://www.youtube.com/embed/{$matches[7]}?start=$starttime";
+                }
+            }
+            return "https://www.youtube.com/embed/{$matches[7]}";
         }
 
         // Vimeo.
         $matches = null;
-        $pattern  = '/^(https?:\/\/)?(www.)?(player.)?vimeo.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*$/';
+        $pattern  = '/^(https?:\/\/)?(www.)?(player.)?vimeo.com\/([a-z]*\/)*([0-9]{6,11})([?]?.*)$/';
         preg_match($pattern, $url, $matches);
         if ($matches && isset($matches[5])) {
-            return 'https://player.vimeo.com/video/' . $matches[5];
+            if (isset($matches[6])) {
+                return "https://player.vimeo.com/video/{$matches[5]}{$matches[6]}";
+            }
+            return "https://player.vimeo.com/video/{$matches[5]}";
         }
 
         return false;

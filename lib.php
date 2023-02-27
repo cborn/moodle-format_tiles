@@ -736,47 +736,51 @@ class format_tiles extends format_base {
 
                 // If we are changing from Grid format, we iterate through each of the grid images and set it up for this format.
                 if ($oldcourse !== null && $oldcourse['format'] == 'grid') {
-                    $gridformaticons = $DB->get_records('format_grid_icon', array('courseid' => $courseid), 'sectionid');
-                    $fs = get_file_storage();
-                    foreach ($gridformaticons as $gridformaticon) {
-                        if (!$gridformaticon->image) {
-                            continue;
-                        }
-                        $tilephoto = new \format_tiles\tile_photo($courseid, $gridformaticon->sectionid);
-                        $gridfile = $fs->get_file(
-                            $coursecontext->id,
-                            'course',
-                            'section',
-                            $gridformaticon->sectionid,
-                            '/gridimage/',
-                            $gridformaticon->displayedimageindex . '_' . $gridformaticon->image
-                        );
-                        if ($gridfile) {
-                            // We copy the grid image file into Tiles format, so it is included in backups etc.
-                            $fs = get_file_storage();
-                            $newfilerecord = \format_tiles\tile_photo::file_api_params();
-                            $newfilerecord['contextid'] = $coursecontext->id;
-                            $newfilerecord['itemid'] = $gridformaticon->sectionid;
-                            $newfilerecord['userid'] = $USER->id;
-                            $newfilerecord['filename'] = str_replace('_goi_', '_', $gridfile->get_filename());
-                            $fs->delete_area_files(
-                                $coursecontext->id,
-                                $newfilerecord['component'],
-                                $newfilerecord['filearea'],
-                                $newfilerecord['itemid']
-                            );
-                            $newfile = $fs->create_file_from_storedfile($newfilerecord, $gridfile);
-                            if ($newfile) {
-                                $tilephoto->set_file($newfile);
-                                // We *could* delete grid format files here, but we don't as they don't belong to us.
-                                // If we don't, they will be included in export course archives.
+                    $dbman = $DB->get_manager();
+                    $gridtable = 'format_grid_icon';
+                    if ($dbman->table_exists($gridtable)) {
+                        $gridformaticons = $DB->get_records($gridtable, array('courseid' => $courseid), 'sectionid');
+                        $fs = get_file_storage();
+                        foreach ($gridformaticons as $gridformaticon) {
+                            if (!$gridformaticon->image) {
+                                continue;
                             }
-                        } else {
-                            debugging(
-                                'Grid format image not found '
-                                    . $gridformaticon->displayedimageindex . '_' . $gridformaticon->image,
-                                DEBUG_DEVELOPER
+                            $tilephoto = new \format_tiles\tile_photo($courseid, $gridformaticon->sectionid);
+                            $gridfile = $fs->get_file(
+                                $coursecontext->id,
+                                'course',
+                                'section',
+                                $gridformaticon->sectionid,
+                                '/gridimage/',
+                                $gridformaticon->displayedimageindex . '_' . $gridformaticon->image
                             );
+                            if ($gridfile) {
+                                // We copy the grid image file into Tiles format, so it is included in backups etc.
+                                $fs = get_file_storage();
+                                $newfilerecord = \format_tiles\tile_photo::file_api_params();
+                                $newfilerecord['contextid'] = $coursecontext->id;
+                                $newfilerecord['itemid'] = $gridformaticon->sectionid;
+                                $newfilerecord['userid'] = $USER->id;
+                                $newfilerecord['filename'] = str_replace('_goi_', '_', $gridfile->get_filename());
+                                $fs->delete_area_files(
+                                    $coursecontext->id,
+                                    $newfilerecord['component'],
+                                    $newfilerecord['filearea'],
+                                    $newfilerecord['itemid']
+                                );
+                                $newfile = $fs->create_file_from_storedfile($newfilerecord, $gridfile);
+                                if ($newfile) {
+                                    $tilephoto->set_file($newfile);
+                                    // We *could* delete grid format files here, but we don't as they don't belong to us.
+                                    // If we don't, they will be included in export course archives.
+                                }
+                            } else {
+                                debugging(
+                                    'Grid format image not found '
+                                    . $gridformaticon->displayedimageindex . '_' . $gridformaticon->image,
+                                    DEBUG_DEVELOPER
+                                );
+                            }
                         }
                     }
                 }

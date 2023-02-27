@@ -312,3 +312,9 @@ Other
 ======================
 - Fix PHP 8 compatibility on section edit form
 - Add Moodle 4.0 incompatibility warning
+
+3.11.1.5 (2020080631)
+======================
+- Fix issue #133 nav bug with JS navigation off
+- Avoid grid format table rename issue
+- Improve handling of URL params in embedded YouTube and Vimeo URLs (issue 28 and 143)
